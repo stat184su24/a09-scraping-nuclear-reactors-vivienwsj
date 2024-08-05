@@ -45,7 +45,7 @@ japan_table <- japan_table %>%
   mutate(begin_building = dmy(`Beginbuilding`))
 
 # Plot Net Generation Capacity vs Construction Date
-ggplot(japan_table, aes(x = begin_building, y = `Capacity(MW)`, color = Type)) +
+ggplot(japan_table, aes(x = Beginbuilding, y = `Capacity(MW)`, color = Type)) +
   geom_point() +
   labs(title = "Net Generation Capacity vs Construction Date",
        x = "Construction Date",
