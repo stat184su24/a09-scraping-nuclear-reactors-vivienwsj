@@ -1,42 +1,113 @@
 ---
-title: "Activity: Nuclear Reactors"
-author: "YOUR NAME HERE"
-output: html_notebook
+title: 'Activity: Nuclear Reactors'
+author: "Sijie Wu"
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r}
 library(tidyverse)
-
 ```
 
 ## Scrape the Data 
 
 ```{r}
-#My code here.... 
+library(rvest)
+library(dplyr)
 
+# Scrape the table data from Wikipedia
+page <- "https://en.wikipedia.org/wiki/List_of_commercial_nuclear_reactors"
+tableList <- page %>%
+  read_html() %>%
+  html_nodes(css = "table") %>%
+  html_table(fill = TRUE)
 
+japan_table <- tableList[[21]]
+
+# View the first few rows to confirm
+head(japan_table)
 ```
 
 
 ## Your turn: In what ways is the table tidy? How is it not tidy? What’s different about it from a tidy table?
 
-My answer here..... 
-
+It is tidy because each case has its own row, each column represents a single variable. It is not tidy in two ways. First, the date columns (Beginbuilding, Commercialoperation, and Closed) are stored as character strings instead of date objects, which is not optimal for analysis. Second, The column names have inconsistent naming conventions (e.g., Beginbuilding could be more consistent with other date columns).
 
 ## Your Turn: Plot Net Generation Capacity vs Construction Date
 
 ```{r}
-#my code here 
+library(ggplot2)
+library(lubridate)
 
+# Convert the date column from character to Date type
+japan_table <- japan_table %>%
+  mutate(begin_building = dmy(`Beginbuilding`))
 
+# Plot Net Generation Capacity vs Construction Date
+ggplot(japan_table, aes(x = begin_building, y = `Capacity(MW)`, color = Type)) +
+  geom_point() +
+  labs(title = "Net Generation Capacity vs Construction Date",
+       x = "Construction Date",
+       y = "Net Generation Capacity (MW)",
+       color = "Reactor Type") +
+  theme_minimal()
 ```
 
 
 ## Your Turn: Scrape & Clean China Data (then merge with Japan)
 
 ```{r}
-#my code here... 
+# Scrape the table data from Wikipedia
+page <- "https://en.wikipedia.org/wiki/List_of_commercial_nuclear_reactors"
+tableList <- page %>%
+  read_html() %>%
+  html_nodes(css = "table") %>%
+  html_table(fill = TRUE)
 
+china_table <- tableList[[10]]
+
+# View the first few rows to confirm
+head(china_table)
+
+china_clean <- china_table %>%
+  rename(Capacity = `Capacity(MW)`)
+  
+china_clean <- china_clean %>%
+  mutate(
+    Capacity = as.numeric(Capacity),
+    Beginuilding = dmy(Beginbuilding),
+    Commercialoperation = dmy(Commercialoperation)
+  )
+
+# Add country column
+china_clean <- china_clean %>% mutate(country = "China")
+
+# Check the cleaned data
+head(china_clean)
+
+# Add country column to Japan data
+
+japan_clean <- japan_table %>%
+  rename(Capacity = `Capacity(MW)`)
+
+japan_clean <- japan_clean %>%
+  mutate(
+    Capacity = as.numeric(Capacity),
+    begin_building = dmy(`Beginbuilding`),
+    Commercialoperation = dmy(Commercialoperation),
+    country = "Japan"
+  )
+
+# Merge data
+# Combine the data
+combined_data <- full_join(japan_clean, china_clean, by = c("Plantname", "Type", "Model", "Status", "Capacity", "Commercialoperation","Closed","Beginbuilding","country"))
+
+# Check the combined data
+head(combined_data)
+
+# Check the combined data
+head(combined_data)
 ```
 
 
@@ -44,6 +115,12 @@ My answer here.....
 ## Your Turn: Reconstruct Info Graphic of Japan Reactors (or other country of interest)
 
 ```{r}
-#My code here
-
+# Plot Net Generation Capacity vs Construction Date
+ggplot(combined_data, aes(x = Beginbuilding, y = Capacity, color = Type)) +
+  geom_point() +
+  labs(title = "Net Generation Capacity vs Construction Date",
+       x = "Construction Date",
+       y = "Net Generation Capacity (MW)",
+       color = "Reactor Type") +
+  theme_minimal()
 ```
