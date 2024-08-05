@@ -86,8 +86,7 @@ china_clean <- china_clean %>% mutate(country = "China")
 # Check the cleaned data
 head(china_clean)
 
-# Add country column to Japan data
-
+#Clean japan data
 japan_clean <- japan_table %>%
   rename(Capacity = `Capacity(MW)`)
 
@@ -99,14 +98,10 @@ japan_clean <- japan_clean %>%
     country = "Japan"
   )
 
-# Merge data
-# Combine the data
+# join the data
 combined_data <- full_join(japan_clean, china_clean, by = c("Plantname", "Type", "Model", "Status", "Capacity", "Commercialoperation","Closed","Beginbuilding","country"))
 
-# Check the combined data
-head(combined_data)
-
-# Check the combined data
+# Check the joined data
 head(combined_data)
 ```
 

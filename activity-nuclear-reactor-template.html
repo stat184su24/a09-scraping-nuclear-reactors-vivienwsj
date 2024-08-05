@@ -1742,8 +1742,7 @@ head(china_clean)</code></pre>
 {"columns":[{"label":["Plantname"],"name":[1],"type":["chr"],"align":["left"]},{"label":["UnitNo."],"name":[2],"type":["chr"],"align":["left"]},{"label":["Type"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Model"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Status"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Capacity"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Beginbuilding"],"name":[7],"type":["chr"],"align":["left"]},{"label":["Commercialoperation"],"name":[8],"type":["date"],"align":["right"]},{"label":["Closed"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["Beginuilding"],"name":[10],"type":["date"],"align":["right"]},{"label":["country"],"name":[11],"type":["chr"],"align":["left"]}],"data":[{"1":"Bailong","2":"1","3":"PWR","4":"CAP-1000","5":"Planned","6":"1100","7":"","8":"<NA>","9":"NA","10":"<NA>","11":"China"},{"1":"Bailong","2":"2","3":"PWR","4":"CAP-1000","5":"Planned","6":"1100","7":"","8":"<NA>","9":"NA","10":"<NA>","11":"China"},{"1":"Changjiang","2":"I-1","3":"PWR","4":"CNP-600","5":"Operational","6":"601","7":"25 Apr 2010","8":"2015-12-25","9":"NA","10":"2010-04-25","11":"China"},{"1":"Changjiang","2":"I-2","3":"PWR","4":"CNP-600","5":"Operational","6":"601","7":"21 Nov 2010","8":"2016-06-20","9":"NA","10":"2010-11-21","11":"China"},{"1":"Changjiang","2":"I-3[25]","3":"PWR","4":"Hualong One","5":"Under construction","6":"1200","7":"31 Mar 2021[26]","8":"<NA>","9":"NA","10":"<NA>","11":"China"},{"1":"Changjiang","2":"I-4[25]","3":"PWR","4":"Hualong One","5":"Under construction","6":"1200","7":"31 Mar 2021[26]","8":"<NA>","9":"NA","10":"<NA>","11":"China"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<pre class="r"><code># Add country column to Japan data
-
+<pre class="r"><code>#Clean japan data
 japan_clean &lt;- japan_table %&gt;%
   rename(Capacity = `Capacity(MW)`)
 
@@ -1758,18 +1757,10 @@ japan_clean &lt;- japan_clean %&gt;%
 ## ℹ In argument: `begin_building = dmy(Beginbuilding)`.
 ## Caused by warning:
 ## !  1 failed to parse.</code></pre>
-<pre class="r"><code># Merge data
-# Combine the data
+<pre class="r"><code># join the data
 combined_data &lt;- full_join(japan_clean, china_clean, by = c(&quot;Plantname&quot;, &quot;Type&quot;, &quot;Model&quot;, &quot;Status&quot;, &quot;Capacity&quot;, &quot;Commercialoperation&quot;,&quot;Closed&quot;,&quot;Beginbuilding&quot;,&quot;country&quot;))
 
-# Check the combined data
-head(combined_data)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Plantname"],"name":[1],"type":["chr"],"align":["left"]},{"label":["UnitNo..x"],"name":[2],"type":["int"],"align":["right"]},{"label":["Type"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Model"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Status"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Capacity"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Beginbuilding"],"name":[7],"type":["chr"],"align":["left"]},{"label":["Commercialoperation"],"name":[8],"type":["date"],"align":["right"]},{"label":["Closed"],"name":[9],"type":["chr"],"align":["left"]},{"label":["begin_building"],"name":[10],"type":["date"],"align":["right"]},{"label":["country"],"name":[11],"type":["chr"],"align":["left"]},{"label":["UnitNo..y"],"name":[12],"type":["chr"],"align":["left"]},{"label":["Beginuilding"],"name":[13],"type":["date"],"align":["right"]}],"data":[{"1":"Fugen","2":"1","3":"HWLWR","4":"ATR","5":"Shut down","6":"148","7":"10 May 1972","8":"1979-03-20","9":"29 Mar 2003","10":"1972-05-10","11":"Japan","12":"NA","13":"<NA>"},{"1":"Fukushima Daiichi","2":"1","3":"BWR","4":"BWR-3","5":"Inoperable","6":"439","7":"25 Jul 1967","8":"1971-03-26","9":"19 May 2011","10":"1967-07-25","11":"Japan","12":"NA","13":"<NA>"},{"1":"Fukushima Daiichi","2":"2","3":"BWR","4":"BWR-4","5":"Inoperable","6":"760","7":"9 Jun 1969","8":"1974-07-18","9":"19 May 2011","10":"1969-06-09","11":"Japan","12":"NA","13":"<NA>"},{"1":"Fukushima Daiichi","2":"3","3":"BWR","4":"BWR-4","5":"Inoperable","6":"760","7":"28 Dec 1970","8":"1976-03-27","9":"19 May 2011","10":"1970-12-28","11":"Japan","12":"NA","13":"<NA>"},{"1":"Fukushima Daiichi","2":"4","3":"BWR","4":"BWR-4","5":"Inoperable","6":"760","7":"12 Feb 1973","8":"1978-10-12","9":"19 May 2011","10":"1973-02-12","11":"Japan","12":"NA","13":"<NA>"},{"1":"Fukushima Daiichi","2":"5","3":"BWR","4":"BWR-4","5":"Shut down","6":"760","7":"22 May 1972","8":"1978-04-18","9":"17 Dec 2013","10":"1972-05-22","11":"Japan","12":"NA","13":"<NA>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<pre class="r"><code># Check the combined data
+# Check the joined data
 head(combined_data)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
